@@ -1,0 +1,9 @@
+resource "ironic_deployment" "oac-infra" {
+  count     = 3
+  node_uuid = element(ironic_allocation.oac-infra.*.node_uuid, count.index)
+
+  instance_info = {
+    deploy_interface = "ramdisk"
+    boot_iso   = "http://www.tinycorelinux.net/17.x/x86/release/TinyCore-current.iso"
+  }
+}
