@@ -4,7 +4,11 @@ The Open Accelerator (OA) environment will be used to host projects that do not 
 
 ## Project tracking
 
-All issues related to this project live in the [moc-issues repository](https://github.com/CCI-MOC/MOC-issues/issues). You can track the progress of individual components via the [milestones](https://github.com/CCI-MOC/moc-issues/milestones).
+All issues related to this project live in the [moc-issues repository](https://github.com/CCI-MOC/MOC-issues/issues). See:
+
+- [A list of all epics](https://github.com/CCI-MOC/MOC-issues/issues?q=sort%3Aupdated-desc%20is%3Aissue%20state%3Aopen%20label%3Aepic%20label%3Aopen-accelerator)
+- [Progress towards completion](https://github.com/CCI-MOC/moc-issues/milestones).
+- [A list of all issues](https://github.com/CCI-MOC/MOC-issues/issues?q=sort%3Aupdated-desc%20is%3Aissue%20state%3Aopen%20label%3Aopen-accelerator)
 
 ## The plan in brief
 
