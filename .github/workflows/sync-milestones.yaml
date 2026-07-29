@@ -1,0 +1,25 @@
+name: Sync milestones
+
+"on":
+  schedule:
+    # Run once/hour
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+jobs:
+  sync-milestones:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate GitHub App Token
+        id: get_app_token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v7
+
+      - run: |
+          ./scripts/sync-milestones.py
+        env:
+          GH_TOKEN: ${{ steps.get_app_token.outputs.token }}
