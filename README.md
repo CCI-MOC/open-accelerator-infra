@@ -12,11 +12,15 @@ All issues related to this project live in the [moc-issues repository](https://g
 
 ## The plan in brief
 
-There are two major phases to our deployment plan:
+There are four major components in this plan:
 
-1. Stage 1 builds -- in this phase, we will be performing preliminary deployments onto ESI-managed hardware. Our goal is to validate (or not) the tooling and architecture presented by RH consulting.
+1. Build RHOSO18 platform to replace ESI
 
-2. Stage 2 builds -- these will be the "production" builds. Hardware will be allocated from the new RHOSO18 environment, if it's available. If RHOSO18 is not available we will use OpenShift's native bare metal support and will manage networking out-of-band.
+2. Deploy Keycloak IDP
+
+1. Stage 1 cluster builds -- in this phase, we will be performing preliminary deployments onto ESI-managed hardware. Our goal is to validate (or not) the tooling and architecture presented by RH consulting.
+
+2. Stage 2 cluster builds -- these will be the "production" builds. Hardware will be allocated from the new RHOSO18 environment, if it's available. If RHOSO18 is not available we will use OpenShift's native bare metal support and will manage networking out-of-band.
 
 The goal is to have the stage 2 environment running by September 1.
 
@@ -24,6 +28,7 @@ The goal is to have the stage 2 environment running by September 1.
 
 As we move forward with this project, we should ensure that everything we do is:
 
+- Documented -- we should make it easy for someone else to start working with our code or configuration
 - Automated -- We should ensure that whenever possible our deployment and configuration processes are driven by automated workflows. If there are situations that require manual intervention in order to complete them in a timely fashion, we should document them as problems that need to be corrected in the future.
 - Repeatable -- It should be (relatively) easy to tear down and rebuild each component of the infrastructure.
 - Reviewed -- There should be at least two sets of eyes (and ideally more) on any configuration or code involved in this project.
