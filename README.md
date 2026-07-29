@@ -10,6 +10,14 @@ All issues related to this project live in the [moc-issues repository](https://g
 - [Progress towards completion](https://github.com/CCI-MOC/moc-issues/milestones).
 - [A list of all issues](https://github.com/CCI-MOC/MOC-issues/issues?q=sort%3Aupdated-desc%20is%3Aissue%20state%3Aopen%20label%3Aopen-accelerator)
 
+## Where things live
+
+- Infrastructure-specific documentation will live in this [open-accelerator-infra repository](https://github.com/cci-moc/open-accelerator-infra).
+- The cluster deployment and configuration tooling provided by the Red Hat consultants lives in the [ai-ivp repository](https://github.com/cci-moc/ai-ivp). This is where we expect to place new cluster configuration.
+- We use the [moc-aws repository](https://github.com/cci-moc/moc-aws) to manage persistent resources in AWS.
+- Switch configuration that is not managed via ESI lives in the [ansible-switches repository](https://github.com/CCI-MOC/ansible-switches)
+- We're using the `open-accelerator` project in ESI to acquire hardware for the preliminary cluster installs.
+
 ## The plan in brief
 
 There are four major components in this plan:
@@ -121,7 +129,3 @@ The OA production cluster will host Open Accelerator residents.
 | OpenShift compute       | fc830        | 3     |
 
 This will be a testing ground for configuration intended for the production cluster.
-
-## Infra notes
-
-We're using the `open-accelerator` project in ESI to acquire hardware for the preliminary cluster installs.
