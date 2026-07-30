@@ -23,3 +23,16 @@ variable "allocation_pool" {
   })
   default = null
 }
+
+variable "extra_ports" {
+  type    = list(string)
+  default = []
+}
+
+variable "extra_routes" {
+  type = list(object({
+    destination = string
+    gateway     = string
+  }))
+  default = []
+}

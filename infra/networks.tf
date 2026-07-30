@@ -1,18 +1,36 @@
 locals {
   networks = {
-    osac-infra = {
-      cidr = "172.16.0.0/23"
+    oac-infra = {
+      cidr = "10.20.2.0/23"
       allocation_pool = {
-        start = "172.16.0.10"
-        end   = "172.16.0.255"
+        start = "10.20.2.10"
+        end   = "10.20.2.255"
       }
+      extra_ports = [
+        "oac-infra-port",
+      ]
+      extra_routes = [
+        {
+          destination = "10.208.0.0/24"
+          gateway     = "10.20.0.1"
+        }
+      ]
     }
-    osac-prod = {
-      cidr = "172.16.2.0/23"
+    oac-prod = {
+      cidr = "10.20.4.0/23"
       allocation_pool = {
-        start = "172.16.2.10"
-        end   = "172.16.2.255"
+        start = "10.20.4.10"
+        end   = "10.20.4.255"
       }
+      extra_ports = [
+        "oac-prod-port",
+      ]
+      extra_routes = [
+        {
+          destination = "10.208.0.0/24"
+          gateway     = "10.20.0.1"
+        }
+      ]
     }
   }
 }
@@ -24,4 +42,12 @@ module "network" {
   name            = each.key
   cidr            = each.value.cidr
   allocation_pool = try(each.value.allocation_pool, null)
+  extra_ports     = each.value.extra_ports
+  extra_routes    = each.value.extra_routes
 }
+
+output "network_ids" {
+  description = "Map of network names to their IDs"
+  value       = { for k, v in module.network : k => v.network_id }
+}
+

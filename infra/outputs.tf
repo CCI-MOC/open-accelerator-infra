@@ -1,8 +1,3 @@
-output "network_ids" {
-  description = "Map of network names to their IDs"
-  value       = { for k, v in module.network : k => v.network_id }
-}
-
 output "oac-bastion-nodes" {
   description = "List of nodes allocated to oac-bastion cluster"
   value = [for i, a in ironic_allocation.oac-bastion : {

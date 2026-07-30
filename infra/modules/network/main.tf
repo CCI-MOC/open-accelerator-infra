@@ -36,7 +36,25 @@ resource "openstack_networking_router_v2" "this" {
   external_network_id = data.openstack_networking_network_v2.external_network.id
 }
 
-resource "openstack_networking_router_interface_v2" "router_interface_1" {
+resource "openstack_networking_router_interface_v2" "interal_interface" {
   router_id = openstack_networking_router_v2.this.id
   subnet_id = openstack_networking_subnet_v2.this.id
+}
+
+data "openstack_networking_port_v2" "extra" {
+  for_each = toset(var.extra_ports)
+  name     = each.value
+}
+
+resource "openstack_networking_router_interface_v2" "extra" {
+  for_each  = toset(var.extra_ports)
+  router_id = openstack_networking_router_v2.this.id
+  port_id   = data.openstack_networking_port_v2.extra[each.key].id
+}
+
+resource "openstack_networking_router_route_v2" "extra" {
+  for_each         = { for r in var.extra_routes : r.destination => r }
+  router_id        = openstack_networking_router_v2.this.id
+  destination_cidr = each.value.destination
+  next_hop         = each.value.gateway
 }
