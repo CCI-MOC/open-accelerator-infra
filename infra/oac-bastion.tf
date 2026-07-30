@@ -16,6 +16,6 @@ resource "ironic_deployment" "oac-bastion" {
 
   instance_info = {
     deploy_interface = "ramdisk"
-    boot_iso         = "http://www.tinycorelinux.net/17.x/x86/release/TinyCore-current.iso"
+    boot_iso         = var.boot_image
   }
 }
