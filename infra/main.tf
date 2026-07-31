@@ -19,5 +19,5 @@ provider "ironic" {
 
 variable "boot_image" {
   type    = string
-  default = "https://southfront.mm.fcix.net/fedora/linux/releases/44/Workstation/x86_64/iso/Fedora-Workstation-Live-44-1.7.x86_64.iso"
+  default = "https://fedora.mirror.constant.com/fedora/linux/releases/44/Server/x86_64/iso/Fedora-Server-netinst-x86_64-44-1.7.iso"
 }
