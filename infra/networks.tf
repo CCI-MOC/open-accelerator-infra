@@ -11,7 +11,7 @@ locals {
       ]
       extra_routes = [
         {
-          destination = "10.208.0.0/24"
+          destination = "10.208.0.0/23"
           gateway     = "10.20.0.1"
         }
       ]
@@ -27,7 +27,7 @@ locals {
       ]
       extra_routes = [
         {
-          destination = "10.208.0.0/24"
+          destination = "10.208.0.0/23"
           gateway     = "10.20.0.1"
         }
       ]
@@ -43,7 +43,7 @@ locals {
       ]
       extra_routes = [
         {
-          destination = "10.208.0.0/24"
+          destination = "10.208.0.0/23"
           gateway     = "10.20.0.1"
         }
       ]
