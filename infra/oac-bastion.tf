@@ -10,8 +10,13 @@ data "ironic_node" "oac-bastion" {
   uuid  = ironic_allocation.oac-bastion[count.index].node_uuid
 }
 
+variable "deploy-bastion" {
+  type    = bool
+  default = false
+}
+
 resource "ironic_deployment" "oac-bastion" {
-  count     = var.deploy ? 1 : 0
+  count     = try(var.deploy-bastion, 0) ? 1 : 0
   node_uuid = element(ironic_allocation.oac-bastion.*.node_uuid, count.index)
 
   instance_info = {

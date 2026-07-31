@@ -10,8 +10,13 @@ data "ironic_node" "oac-infra" {
   uuid  = ironic_allocation.oac-infra[count.index].node_uuid
 }
 
+variable "deploy-infra" {
+  type    = bool
+  default = false
+}
+
 resource "ironic_deployment" "oac-infra" {
-  count     = var.deploy ? 3 : 0
+  count     = try(var.deploy-infra, 0) ? 3 : 0
   node_uuid = element(ironic_allocation.oac-infra.*.node_uuid, count.index)
 
   instance_info = {
