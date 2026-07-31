@@ -34,6 +34,18 @@ resource "openstack_networking_port_v2" "oac-infra-port" {
   }
 }
 
+resource "openstack_networking_port_v2" "oac-staging-port" {
+  name           = "oac-staging-port"
+  network_id     = openstack_networking_network_v2.oac-fw-net.id
+  admin_state_up = "true"
+  tenant_id      = data.openstack_identity_project_v3.open-accelerator.id
+
+  fixed_ip {
+    subnet_id  = openstack_networking_subnet_v2.oac-fw-net.id
+    ip_address = "10.20.0.40"
+  }
+}
+
 resource "openstack_networking_port_v2" "oac-prod-port" {
   name           = "oac-prod-port"
   network_id     = openstack_networking_network_v2.oac-fw-net.id
@@ -42,6 +54,6 @@ resource "openstack_networking_port_v2" "oac-prod-port" {
 
   fixed_ip {
     subnet_id  = openstack_networking_subnet_v2.oac-fw-net.id
-    ip_address = "10.20.0.40"
+    ip_address = "10.20.0.60"
   }
 }

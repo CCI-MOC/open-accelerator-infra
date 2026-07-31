@@ -16,11 +16,27 @@ locals {
         }
       ]
     }
-    oac-prod = {
+    oac-staging = {
       cidr = "10.20.4.0/23"
       allocation_pool = {
         start = "10.20.4.10"
         end   = "10.20.4.255"
+      }
+      extra_ports = [
+        "oac-staging-port",
+      ]
+      extra_routes = [
+        {
+          destination = "10.208.0.0/24"
+          gateway     = "10.20.0.1"
+        }
+      ]
+    }
+    oac-prod = {
+      cidr = "10.20.6.0/23"
+      allocation_pool = {
+        start = "10.20.6.10"
+        end   = "10.20.6.255"
       }
       extra_ports = [
         "oac-prod-port",
