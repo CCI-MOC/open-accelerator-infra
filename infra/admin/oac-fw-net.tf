@@ -11,10 +11,11 @@ resource "openstack_networking_network_v2" "oac-fw-net" {
 }
 
 resource "openstack_networking_subnet_v2" "oac-fw-net" {
-  name       = openstack_networking_network_v2.oac-fw-net.name
-  network_id = openstack_networking_network_v2.oac-fw-net.id
-  cidr       = "10.20.0.0/24"
-  ip_version = 4
+  name        = openstack_networking_network_v2.oac-fw-net.name
+  network_id  = openstack_networking_network_v2.oac-fw-net.id
+  cidr        = "10.20.0.0/24"
+  enable_dhcp = false
+  ip_version  = 4
 }
 
 data "openstack_identity_project_v3" "open-accelerator" {
