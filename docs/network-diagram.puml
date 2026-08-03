@@ -1,0 +1,53 @@
+@startnwdiag
+network admin-wireguard-clients {
+  color = "blue"
+  address = "10.208.0.0/24"
+  firewall [address = "10.208.0.1"]
+}
+network unprivileged-wireguard-clients {
+  color = "blue"
+  address = "10.208.1.0/24"
+  firewall [address = "10.208.1.1"]
+}
+network oac-firewall-access {
+  color = "green"
+  address = "10.20.0.0/24"
+  firewall [address = "10.20.0.1"]
+  router-oac-infra [address = "10.20.0.20", color=yellow]
+  router-oac-prod [address = "10.20.0.40", color=yellow]
+  router-oac-staging [address = "10.20.0.60", color=yellow]
+}
+network external-access {
+  color = "red"
+    address = "128.31.20.0/22"
+    router-oac-prod [address = "128.31.x.y"]
+    router-oac-infra [address = "128.31.x.y"]
+    router-oac-staging [address = "128.31.x.y"]
+  }
+network oac-infra {
+  color = "yellow"
+  address = "10.20.2.0/23"
+  router-oac-infra [address = "10.20.2.1"]
+  oac-infra-control-0 [address="10.20.2.x", shape=node]
+  oac-infra-control-1 [address="10.20.2.y", shape=node]
+  oac-infra-control-2 [address="10.20.2.z", shape=node]
+}
+network oac-prod {
+  color = "yellow"
+  address = "10.20.4.0/23"
+  router-oac-prod [address = "10.20.4.1"]
+  oac-prod-compute-0 [address="10.20.4.x", shape=node]
+  oac-prod-compute-1 [address="10.20.4.y", shape=node]
+  oac-prod-compute-2 [address="10.20.4.z", shape=node]
+}
+
+network oac-staging {
+  color = "yellow"
+  address = "10.20.6.0/23"
+  router-oac-staging [address = "10.20.6.1"]
+  oac-staging-compute-0 [address="10.20.6.x", shape=node]
+  oac-staging-compute-1 [address="10.20.6.y", shape=node]
+  oac-staging-compute-2 [address="10.20.6.z", shape=node]
+}
+@endnwdiag
+
