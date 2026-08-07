@@ -102,7 +102,8 @@ manage bare metal nodes and networking in the MOC 2.0 environment.
 
 | Description             | Machine type | Count |
 | ----------------------- | ------------ | ----- |
-| OpenShift control plane | r440         | 3     |
+| OpenShift control plane | fc430        | 3     |
+| OpenShift compute       | r440         | 3     |
 
 The OA infra cluster will run tooling (ACM, ArgoCD) for installing and managing
 other clusters. It will host the control planes for clusters deployed using
