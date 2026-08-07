@@ -93,7 +93,8 @@ We will deploy each cluster on a separate VLAN. We will implement appropriate fi
 
 | Description             | Machine type | Count |
 | ----------------------- | ------------ | ----- |
-| OpenShift control plane | fc430        | 3     |
+| OpenShift control plane | fc830        | 3     |
+| Networker node          | fc830        | 2     |
 
 The RHOSO cluster will provide the underlying hardware API through which we
 manage bare metal nodes and networking in the MOC 2.0 environment.
