@@ -33,6 +33,7 @@
       failed_when: >-
         "error" in result.stdout|lower
       loop:
+        - racadm remoteimage -d
         - racadm remoteimage -c -l "{{ boot_image_url }}"
         - racadm set idrac.serverboot.FirstBootDevice VCD-DVD
         - racadm set idrac.serverboot.BootOnce 1
@@ -41,6 +42,14 @@
       delegate_to: "{{ bmc_addr }}"
       ansible.builtin.raw: racadm remoteimage -s
       register: remoteimage_status
+
+    - name: Fail if image url is incorrect
+      assert:
+        that:
+          - >-
+            "ShareName %s" % boot_image_url in remoteimage_status.stdout
+        fail_msg: "Failed to configure the remote image path"
+        success_msg: "Remote image path is correct"
 
     - debug:
         var: remoteimage_status
