@@ -1,0 +1,5 @@
+plugin: ansible.builtin.constructed
+strict: false
+
+groups:
+  idrac_managed: bmc_addr is defined
