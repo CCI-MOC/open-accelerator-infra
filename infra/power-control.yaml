@@ -1,0 +1,24 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    power_state: "off"
+  tasks:
+    - name: Set power {{ power_state }}
+      delegate_to: localhost
+      ansible.builtin.command: >-
+        openstack baremetal node power {{ power_state }} {{ node_name }}
+
+    - name: Wait for power {{ power_state }}
+      delegate_to: "{{ bmc_addr }}"
+      ansible.builtin.raw: >-
+        racadm serveraction powerstatus
+      register: result
+      until: >-
+        "Server power status: %s" % power_status_string in result.stdout
+      retries: 12
+      delay: 5
+      changed_when: false
+      failed_when: >-
+        "error" in result.stdout|lower
+      vars:
+        power_status_string: "{{ power_state|upper }}"

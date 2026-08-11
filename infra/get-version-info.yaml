@@ -1,0 +1,38 @@
+- hosts: idrac_managed
+  gather_facts: false
+  tasks:
+    - name: Get version information
+      delegate_to: "{{ bmc_addr }}"
+      ansible.builtin.raw: >-
+        racadm getversion
+      register: version
+      changed_when: false
+      failed_when: >-
+        "error" in version.stdout|lower
+
+    - name: Parse version information
+      delegate_to: localhost
+      ansible.builtin.set_fact:
+        versions: >-
+          {{ dict(version.stdout
+             | regex_findall('^\s*(.+?)\s*=\s*(.+?)\s*$', multiline=True)
+          ) }}
+
+    - name: Write versions.csv
+      delegate_to: localhost
+      vars:
+        columns: >-
+          {{ ansible_play_hosts
+             | map('extract', hostvars, 'versions')
+             | map('list')
+             | flatten
+             | unique
+             | list }}
+      ansible.builtin.copy:
+        content: |
+          host,{{ columns | join(',') }}
+          {% for host in ansible_play_hosts -%}
+          {{ host }}{% for col in columns %},{{ hostvars[host].versions[col] | default('') }}{% endfor %}{{ '' }}
+          {% endfor %}
+        dest: versions.csv
+      run_once: true
