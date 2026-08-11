@@ -1,0 +1,44 @@
+all:
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  hosts:
+    oac-bastion:
+      node_name: MOC-R4PAC22U31-S3A
+  children:
+    idracs:
+      vars:
+        ansible_user: root
+        ansible_password: "{{ lookup('env', 'SSHPASS') }}"
+      hosts:
+        10.2.12.91:
+        10.2.12.81:
+        10.2.14.32:
+        10.2.12.141:
+        10.2.12.152:
+        10.2.10.22:
+    oac_infra:
+      vars:
+        network_name: oac-infra
+      hosts:
+        oac-infra-control-0:
+          node_name: MOC-R4PAC22U17-S1
+          bmc_addr: 10.2.12.91
+        oac-infra-control-1:
+          node_name: MOC-R4PAC22U15-S1
+          bmc_addr: 10.2.12.81
+        oac-infra-control-2:
+          node_name: MOC-R4PAC08U05-S3
+          bmc_addr: 10.2.14.32
+    oac_prod:
+      vars:
+        network_name: oac-infra
+      hosts:
+        oac-prod-compute-0:
+          node_name: MOC-R4PAC21U03-S3
+          bmc_addr: 10.2.10.22
+        oac-prod-compute-1:
+          node_name: MOC-R4PAC22U27-S1
+          bmc_addr: 10.2.12.141
+        oac-prod-compute-2:
+          node_name: MOC-R4PAC22U29-S3
+          bmc_addr: 10.2.12.152

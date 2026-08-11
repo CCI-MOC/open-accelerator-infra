@@ -1,0 +1,51 @@
+- hosts: all
+  gather_facts: false
+  vars:
+    boot_image_url: "http://10.2.0.82/boot/agent.x86_64.iso"
+  tasks:
+    - name: Get power state
+      delegate_to: localhost
+      ansible.builtin.command: >-
+        openstack baremetal node show {{ node_name }} -f value -c power_state
+      register: power_state
+
+    - name: Power off node
+      delegate_to: localhost
+      when: >-
+        power_state.stdout != "power off"
+      ansible.builtin.command: >-
+        openstack baremetal node power off {{ node_name }}
+
+    - name: Wait for power off
+      delegate_to: localhost
+      ansible.builtin.command: >-
+        openstack baremetal node show {{ node_name }} -f value -c power_state
+      register: power_state
+      until: >-
+        power_state.stdout == "power off"
+      retries: 12
+      delay: 10
+
+    - name: Configure BMC
+      delegate_to: "{{ bmc_addr }}"
+      ansible.builtin.raw: "{{ item }}"
+      register: result
+      failed_when: >-
+        "error" in result.stdout|lower
+      loop:
+        - racadm remoteimage -c -l "{{ boot_image_url }}"
+        - racadm set idrac.serverboot.FirstBootDevice VCD-DVD
+        - racadm set idrac.serverboot.BootOnce 1
+
+    - name: Get remote image status
+      delegate_to: "{{ bmc_addr }}"
+      ansible.builtin.raw: racadm remoteimage -s
+      register: remoteimage_status
+
+    - debug:
+        var: remoteimage_status
+
+    - name: Power on node
+      delegate_to: localhost
+      ansible.builtin.command: >-
+        openstack baremetal node power on {{ node_name }}

@@ -1,0 +1,54 @@
+- hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Get provision state
+      ansible.builtin.command: |
+        openstack baremetal node show {{ node_name }} -f value -c provision_state
+      register: initial_state
+
+    - name: Adopt node
+      when: >-
+        initial_state.stdout != "active"
+      block:
+        - name: Manage node
+          when: >-
+            initial_state.stdout != "manageable"
+          ansible.builtin.command: |
+            openstack baremetal node manage {{ node_name }}
+
+        - name: Wait for managed state
+          ansible.builtin.command: |
+            openstack baremetal node show {{ node_name }} -f value -c provision_state
+          register: current_state
+          until: >-
+            current_state.stdout == "manageable"
+          retries: 12
+          delay: 10
+
+        - name: Adopt node
+          ansible.builtin.command: |
+            openstack baremetal node adopt {{ node_name }}
+
+    - name: Wait for active state
+      ansible.builtin.command: |
+        openstack baremetal node show {{ node_name }} -f value -c provision_state
+      register: current_state
+      until: >-
+        current_state.stdout == "active"
+      retries: 12
+      delay: 10
+
+    - name: Check network connection
+      ansible.builtin.command: |
+        openstack esi node network list --node {{ node_name }} -f json
+      register: node_network_output
+
+    - name: Attach to network
+      when: >-
+        node_network[0].Network is none or 
+        not node_network[0].Network.startswith(network_name)
+      ansible.builtin.command: |
+        openstack esi node network attach --network {{ network_name }} {{ node_name }}
+      vars:
+        node_network: "{{ node_network_output.stdout|from_json }}"
