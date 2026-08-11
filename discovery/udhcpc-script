@@ -1,0 +1,39 @@
+#!/bin/sh
+
+mask2cidr() {
+  local nbits=0
+  IFS=.
+  for octet in $1; do
+    case $octet in
+      255) nbits=$((nbits + 8)) ;;
+      254) nbits=$((nbits + 7)) ;;
+      252) nbits=$((nbits + 6)) ;;
+      248) nbits=$((nbits + 5)) ;;
+      240) nbits=$((nbits + 4)) ;;
+      224) nbits=$((nbits + 3)) ;;
+      192) nbits=$((nbits + 2)) ;;
+      128) nbits=$((nbits + 1)) ;;
+      0) ;;
+    esac
+  done
+  unset IFS
+  echo $nbits
+}
+
+case "$1" in
+  deconfig)
+    ip -4 addr flush dev "$interface"
+    ip link set "$interface" up
+    ;;
+  bound|renew)
+    m="${mask:-24}"
+    case "$m" in
+      *.*) cidr=$(mask2cidr "$m") ;;
+      *)   cidr="$m" ;;
+    esac
+    ip addr add "${ip}/${cidr}" dev "$interface"
+    for gw in $router; do
+      ip route add default via "$gw" dev "$interface" && break
+    done
+    ;;
+esac
