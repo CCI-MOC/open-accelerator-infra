@@ -5,12 +5,14 @@ all:
     oac-bastion:
       node_name: MOC-R4PAC22U31-S3A
       bmc_addr: 10.2.12.165
+      bmc_type: idrac
   children:
     oac_clusters:
       children:
         oac_infra:
           vars:
             network_name: oac-infra
+            bmc_type: idrac
           hosts:
             oac-infra-control-0:
               node_name: MOC-R4PAC22U17-S1
@@ -24,6 +26,7 @@ all:
         oac_prod:
           vars:
             network_name: oac-infra
+            bmc_type: idrac
           hosts:
             oac-prod-compute-0:
               node_name: MOC-R4PAC21U03-S3
