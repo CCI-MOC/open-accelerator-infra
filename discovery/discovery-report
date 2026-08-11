@@ -1,0 +1,20 @@
+#!/bin/sh
+
+printf '========================================\n'
+printf '  DISCOVERY REPORT\n'
+printf '========================================\n'
+printf '\n'
+printf 'Disk information\n'
+printf '%s\n\n' '----------------'
+lsblk -d -o NAME,SERIAL,WWN,SIZE
+printf '\n'
+printf 'Network information\n'
+printf '%s\n\n' '-------------------'
+for path in /sys/class/net/*; do
+  iface=${path##*/}
+  [ "$iface" = "lo" ] && continue
+  mac=$(cat "$path/address" 2>/dev/null)
+  printf '%-16s %s\n' "$iface" "$mac"
+done
+printf '\n'
+printf '========================================\n'

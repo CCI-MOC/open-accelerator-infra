@@ -1,0 +1,65 @@
+#!/bin/sh
+
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devtmpfs devtmpfs /dev
+mkdir -p /dev/pts /run /var/discovery
+mount -t devpts devpts /dev/pts
+mount -t tmpfs tmpfs /run
+
+if [ -x /usr/lib/systemd/systemd-udevd ]; then
+  /usr/lib/systemd/systemd-udevd --daemon
+elif [ -x /sbin/udevd ]; then
+  /sbin/udevd --daemon
+fi
+
+udevadm trigger --type=subsystems --action=add
+udevadm trigger --type=devices --action=add
+udevadm settle --timeout=30
+
+# Bring up all network interfaces
+for path in /sys/class/net/*; do
+  iface=${path##*/}
+  [ "$iface" = "lo" ] && continue
+  ip link set "$iface" up 2>/dev/null
+done
+sleep 2
+
+# Try DHCP on each interface until one succeeds
+for path in /sys/class/net/*; do
+  iface=${path##*/}
+  [ "$iface" = "lo" ] && continue
+  busybox udhcpc -i "$iface" -s /usr/bin/udhcpc-script -n -q -T 5 -t 3 && break
+done
+
+# Find the first non-loopback IP address
+ip_addr=""
+while read -r _ dev _ addr _; do
+  case "$dev" in lo) continue ;; esac
+  ip_addr=${addr%%/*}
+  break
+done <<EOF
+$(ip -4 -o addr show 2>/dev/null)
+EOF
+
+# Generate the report
+/usr/bin/discovery-report > /var/discovery/index.txt
+
+# Display on console
+printf '\n'
+cat /var/discovery/index.txt
+
+# Start HTTP server and show URL
+if [ -n "$ip_addr" ]; then
+  printf 'Report available at: http://%s/index.txt\n' "$ip_addr"
+  busybox httpd -p 80 -h /var/discovery
+else
+  printf 'WARNING: No network address obtained. Report not available via HTTP.\n'
+fi
+
+printf '\n'
+printf 'Dropping to shell. Type "poweroff" to shut down.\n'
+
+while true; do
+  setsid busybox cttyhack /bin/sh
+done
