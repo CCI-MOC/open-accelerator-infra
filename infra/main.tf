@@ -12,6 +12,15 @@ terraform {
   }
 }
 
+provider "openstack" {
+  cloud = "open-accelerator"
+}
+
+provider "openstack" {
+  alias = "admin"
+  cloud = "moc-esi-admin"
+}
+
 provider "ironic" {
   auth_strategy = "keystone"
   microversion  = "1.72"
