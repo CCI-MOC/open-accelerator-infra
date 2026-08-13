@@ -20,6 +20,10 @@ resource "openstack_networking_subnet_v2" "this" {
   network_id = openstack_networking_network_v2.this.id
   cidr       = var.cidr
   ip_version = var.ip_version
+  dns_nameservers = [
+    "8.8.8.8",
+    "8.8.4.4",
+  ]
 
   dynamic "allocation_pool" {
     for_each = var.allocation_pool != null ? [var.allocation_pool] : []
