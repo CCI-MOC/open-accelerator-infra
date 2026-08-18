@@ -44,6 +44,15 @@
         openstack esi node network list --node {{ node_name }} -f json
       register: node_network_output
 
+    - name: Remove all networks
+      when: >-
+        node_network[0].Network is none or 
+        not node_network[0].Network.startswith(network_name)
+      ansible.builtin.command: |
+        openstack esi node network attach --network {{ network_name }} {{ node_name }}
+      vars:
+        node_network: "{{ node_network_output.stdout|from_json }}"
+
     - name: Attach to network
       when: >-
         node_network[0].Network is none or 
