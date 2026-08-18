@@ -13,6 +13,7 @@ all:
           vars:
             network_name: oac-infra
             bmc_type: idrac
+            boot_image_url: "http://10.2.0.82/boot/agent.x86_64.iso"
           hosts:
             oac-infra-control-0:
               node_name: MOC-R4PAC22U17-S1
@@ -25,8 +26,9 @@ all:
               bmc_addr: 10.2.14.32
         oac_prod:
           vars:
-            network_name: oac-infra
+            network_name: oac-prod
             bmc_type: idrac
+            boot_image_url: "http://10.2.0.82/boot/minimal.iso"
           hosts:
             oac-prod-compute-0:
               node_name: MOC-R4PAC21U03-S3

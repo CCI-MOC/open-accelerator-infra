@@ -1,7 +1,5 @@
 - hosts: all
   gather_facts: false
-  vars:
-    boot_image_url: "http://10.2.0.82/boot/agent.x86_64.iso"
   tasks:
     - name: Get power state
       delegate_to: localhost
