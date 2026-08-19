@@ -1,0 +1,7 @@
+- hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Use node name as topology value
+      command: >-
+        oc label node {{ node_name|lower }} topology.kubernetes.io/zone={{ node_name|lower }}
