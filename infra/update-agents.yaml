@@ -8,6 +8,10 @@
   connection: local
   gather_facts: false
   tasks:
+    - name: Get host metadata
+      ansible.builtin.command: openstack baremetal node show -f json {{ node_name }}
+      register: node_out
+
     - name: Get network interfaces from host
       ansible.builtin.command: openstack esi node network list --node {{ node_name }} -f json
       register: node_network_out
@@ -42,3 +46,14 @@
           --patch '{"spec": {"hostname": "{{node_name|lower}}" } }'
       vars:
         agent_name: "{{ matched_agent[0].metadata.name }}"
+
+    - name: Label agent
+      when: matched_agent|length>0
+      ansible.builtin.command: >-
+        oc -n {{ inventory_namespace }} label agent {{ agent_name }} --overwrite
+          openstack/resource-class={{ node.resource_class}}
+          openstack/uuid={{ node.uuid }}
+          massopen.cloud/cluster={{ cluster }}
+      vars:
+        agent_name: "{{ matched_agent[0].metadata.name }}"
+        node: "{{ node_out.stdout|from_json }}"
