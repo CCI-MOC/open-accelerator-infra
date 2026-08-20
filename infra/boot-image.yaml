@@ -51,6 +51,25 @@
         - rdmount -map -t http -ro -l "{{ boot_image_url }}"
         - rdmount -mount
 
+    - name: Request one-time boot from virtual media
+      when: >
+        bmc_type == "lenovo"
+      delegate_to: localhost
+      ansible.builtin.uri:
+        url: "https://{{ bmc_addr }}/redfish/v1/Systems/1"
+        method: PATCH
+        url_username: "{{ bmc_user }}"
+        url_password: "{{ bmc_password }}"
+        force_basic_auth: true
+        validate_certs: false
+        headers:
+          Content-Type: application/json
+        body_format: json
+        body:
+          Boot:
+            BootSourceOverrideTarget: Cd
+            BootSourceOverrideEnabled: Once
+
     - name: Power on node
       delegate_to: localhost
       ansible.builtin.command: >-
