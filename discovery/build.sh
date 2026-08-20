@@ -76,7 +76,7 @@ dracut \
   --force \
   --modules "base udev-rules" \
   --install "lsblk lspci sh cat ip busybox mount umount mkdir printf udevadm poweroff reboot sleep curl setsid" \
-  --add-drivers "ahci nvme megaraid_sas mpt3sas sd_mod sr_mod virtio_blk virtio_scsi e1000 e1000e igb ixgbe i40e ice mlx5_core tg3 bnx2 bnxt_en virtio_net" \
+  --add-drivers "ahci nvme megaraid_sas mpt3sas sd_mod sr_mod virtio_blk virtio_scsi e1000 e1000e igb ixgbe i40e ice mlx5_core tg3 bnx2 bnx2x bnxt_en virtio_net" \
   --include /usr/share/hwdata/pci.ids /usr/share/hwdata/pci.ids \
   --include "${SCRIPT_DIR}/discovery-init" /usr/bin/discovery-init \
   --include "${SCRIPT_DIR}/discovery-report" /usr/bin/discovery-report \
@@ -84,6 +84,15 @@ dracut \
   --include "${SCRIPT_DIR}/clear" /usr/bin/clear \
   "$INITRD" \
   "$KERNEL_VERSION"
+
+# Regenerate module dependency files inside the initramfs so that
+# modules.alias is complete and udev can autoload drivers.
+echo "==> Regenerating module dependencies..."
+INITRD_UNPACK="${WORK_DIR}/initrd_unpack"
+mkdir -p "$INITRD_UNPACK"
+(cd "$INITRD_UNPACK" && zcat "$INITRD" | cpio -id --quiet)
+depmod -a -b "$INITRD_UNPACK" "$KERNEL_VERSION"
+(cd "$INITRD_UNPACK" && find . | cpio -o -H newc --quiet | gzip > "$INITRD")
 
 # ---------------------------------------------------------------------------
 # Create ISO directory structure

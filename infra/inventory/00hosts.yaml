@@ -29,12 +29,13 @@ all:
               bmc_addr: 10.2.14.32
         oac_dev_workload0:
           vars:
-            network_name: oac-dev-workload0
+            network_name: oac-prod
             cluster: oac-dev-workload0
           children:
             oac_dev_workload0_gpu:
               vars:
                 bmc_type: lenovo
+                boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-discovery.iso"
               hosts:
                 oac-dev-workload0-gpu-0:
                   node_name: MOC-R4PCC02U05
@@ -45,7 +46,7 @@ all:
             oac_dev_workload0_compute:
               vars:
                 bmc_type: idrac
-                boot_image_url: "http://10.2.0.82/boot/minimal.iso"
+                boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-discovery.iso"
               hosts:
                 oac-dev-workload0-compute-0:
                   node_name: MOC-R4PAC21U03-S3
