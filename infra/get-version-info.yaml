@@ -11,15 +11,20 @@
         "error" in version.stdout|lower
 
     - name: Parse version information
-      delegate_to: localhost
       ansible.builtin.set_fact:
         versions: >-
           {{ dict(version.stdout
              | regex_findall('^\s*(.+?)\s*=\s*(.+?)\s*$', multiline=True)
           ) }}
 
-    - name: Write versions.csv
-      delegate_to: localhost
+    - name: Prepare report
+      run_once: true
+      ansible.builtin.set_fact:
+        versions_csv: |
+          host,{{ columns | join(',') }}
+          {% for host in ansible_play_hosts -%}
+          {{ host }}{% for col in columns %},{{ hostvars[host].versions[col] | default('') }}{% endfor %}{{ '' }}
+          {% endfor %}
       vars:
         columns: >-
           {{ ansible_play_hosts
@@ -28,11 +33,15 @@
              | flatten
              | unique
              | list }}
+
+    - name: Display results on console
+      run_once: true
+      ansible.builtin.debug:
+        msg: "{{ versions_csv.splitlines() }}"
+
+    - name: Write versions.csv
+      delegate_to: localhost
       ansible.builtin.copy:
-        content: |
-          host,{{ columns | join(',') }}
-          {% for host in ansible_play_hosts -%}
-          {{ host }}{% for col in columns %},{{ hostvars[host].versions[col] | default('') }}{% endfor %}{{ '' }}
-          {% endfor %}
+        content: "{{ versions_csv }}"
         dest: versions.csv
       run_once: true
