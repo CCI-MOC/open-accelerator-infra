@@ -57,3 +57,11 @@
       vars:
         agent_name: "{{ matched_agent[0].metadata.name }}"
         node: "{{ node_out.stdout|from_json }}"
+
+    - name: Approve agent
+      when: matched_agent|length>0
+      ansible.builtin.command: >-
+        oc -n {{ inventory_namespace }} patch agent {{ agent_name }}
+          --patch '{"spec": {"approved": true}}' --type merge
+      vars:
+        agent_name: "{{ matched_agent[0].metadata.name }}"
