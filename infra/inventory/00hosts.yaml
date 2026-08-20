@@ -2,42 +2,42 @@ all:
   vars:
     ansible_python_interpreter: /usr/bin/python3
   hosts:
-    oac-bastion:
+    oac-dev-bastion:
       node_name: MOC-R4PAC22U31-S3A
       bmc_addr: 10.2.12.165
       bmc_type: idrac
   children:
     oac_clusters:
       children:
-        oac_infra:
+        oac_dev_infra:
           vars:
             network_name: oac-infra
             bmc_type: idrac
             boot_image_url: "http://10.2.0.82/boot/agent.x86_64.iso"
-            cluster: oac-infra
+            cluster: oac-dev-infra
           hosts:
-            oac-infra-control-0:
+            oac-dev-infra-control-0:
               node_name: MOC-R4PAC22U17-S1
               bmc_addr: 10.2.12.91
-            oac-infra-control-1:
+            oac-dev-infra-control-1:
               node_name: MOC-R4PAC22U15-S1
               bmc_addr: 10.2.12.81
-            oac-infra-control-2:
+            oac-dev-infra-control-2:
               node_name: MOC-R4PAC08U05-S3
               bmc_addr: 10.2.14.32
-        oac_prod:
+        oac_dev_workload0:
           vars:
-            network_name: oac-prod
+            network_name: oac-dev-workload0
             bmc_type: idrac
             boot_image_url: "http://10.2.0.82/boot/minimal.iso"
-            cluster: oac-prod
+            cluster: oac-dev-workload0
           hosts:
-            oac-prod-compute-0:
+            oac-dev-workload0-compute-0:
               node_name: MOC-R4PAC21U03-S3
               bmc_addr: 10.2.10.22
-            oac-prod-compute-1:
+            oac-dev-workload0-compute-1:
               node_name: MOC-R4PAC22U27-S1
               bmc_addr: 10.2.12.141
-            oac-prod-compute-2:
+            oac-dev-workload0-compute-2:
               node_name: MOC-R4PAC22U29-S3
               bmc_addr: 10.2.12.152
