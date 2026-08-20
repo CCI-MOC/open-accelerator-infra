@@ -1,5 +1,3 @@
-import os
-
 from ansible.inventory.helpers import get_group_vars
 from ansible.plugins.inventory import BaseInventoryPlugin
 from ansible.utils.vars import combine_vars
@@ -25,10 +23,6 @@ class InventoryModule(BaseInventoryPlugin):
         super().parse(inventory, loader, path, cache)
 
         group = self.inventory.add_group("idracs")
-        self.inventory.set_variable(group, "ansible_user", "root")
-        self.inventory.set_variable(
-            group, "ansible_password", os.environ.get("SSHPASS", "")
-        )
 
         for host in list(self.inventory.hosts):
             host_obj = self.inventory.get_host(host)
@@ -40,3 +34,13 @@ class InventoryModule(BaseInventoryPlugin):
                 bmc_addr = merged_vars.get("bmc_addr")
                 if bmc_addr:
                     self.inventory.add_host(bmc_addr, group)
+                    self.inventory.set_variable(
+                        bmc_addr,
+                        "ansible_user",
+                        merged_vars.get("bmc_user"),
+                    )
+                    self.inventory.set_variable(
+                        bmc_addr,
+                        "ansible_password",
+                        merged_vars.get("bmc_password"),
+                    )

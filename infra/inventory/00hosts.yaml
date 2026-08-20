@@ -1,6 +1,8 @@
 all:
   vars:
     ansible_python_interpreter: /usr/bin/python3
+    bmc_user: root
+    bmc_password: "{{ lookup('env', 'BMC_PASSWORD') }}"
   hosts:
     oac-dev-bastion:
       node_name: MOC-R4PAC22U31-S3A
