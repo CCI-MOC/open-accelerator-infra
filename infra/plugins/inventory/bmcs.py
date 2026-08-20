@@ -14,7 +14,7 @@ DOCUMENTATION = """
 
 
 class InventoryModule(BaseInventoryPlugin):
-    NAME = "idracs"
+    NAME = "bmcs"
 
     def verify_file(self, path):
         return super().verify_file(path) and path.endswith((".yaml", ".yml"))
@@ -22,7 +22,7 @@ class InventoryModule(BaseInventoryPlugin):
     def parse(self, inventory, loader, path, cache=True):
         super().parse(inventory, loader, path, cache)
 
-        group = self.inventory.add_group("idracs")
+        group = self.inventory.add_group("_bmcs")
 
         for host in list(self.inventory.hosts):
             host_obj = self.inventory.get_host(host)
@@ -30,17 +30,16 @@ class InventoryModule(BaseInventoryPlugin):
                 get_group_vars(host_obj.get_groups()), host_obj.get_vars()
             )
 
-            if merged_vars.get("bmc_type") == "idrac":
+            if merged_vars.get("bmc_type") and merged_vars.get("bmc_addr"):
                 bmc_addr = merged_vars.get("bmc_addr")
-                if bmc_addr:
-                    self.inventory.add_host(bmc_addr, group)
-                    self.inventory.set_variable(
-                        bmc_addr,
-                        "ansible_user",
-                        merged_vars.get("bmc_user"),
-                    )
-                    self.inventory.set_variable(
-                        bmc_addr,
-                        "ansible_password",
-                        merged_vars.get("bmc_password"),
-                    )
+                self.inventory.add_host(bmc_addr, group)
+                self.inventory.set_variable(
+                    bmc_addr,
+                    "ansible_user",
+                    merged_vars.get("bmc_user"),
+                )
+                self.inventory.set_variable(
+                    bmc_addr,
+                    "ansible_password",
+                    merged_vars.get("bmc_password"),
+                )

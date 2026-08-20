@@ -24,7 +24,9 @@
       retries: 12
       delay: 10
 
-    - name: Configure BMC
+    - name: Configure idrac
+      when: >
+        bmc_type == "idrac"
       delegate_to: "{{ bmc_addr }}"
       ansible.builtin.raw: "{{ item }}"
       register: result
@@ -36,21 +38,18 @@
         - racadm set idrac.serverboot.FirstBootDevice VCD-DVD
         - racadm set idrac.serverboot.BootOnce 1
 
-    - name: Get remote image status
+    - name: Configure lenovo
+      when: >
+        bmc_type == "lenovo"
       delegate_to: "{{ bmc_addr }}"
-      ansible.builtin.raw: racadm remoteimage -s
-      register: remoteimage_status
-
-    - name: Fail if image url is incorrect
-      assert:
-        that:
-          - >-
-            "ShareName %s" % boot_image_url in remoteimage_status.stdout
-        fail_msg: "Failed to configure the remote image path"
-        success_msg: "Remote image path is correct"
-
-    - debug:
-        var: remoteimage_status
+      ansible.builtin.raw: "{{ item }}"
+      register: result
+      failed_when: >-
+        "[cli]err" in result.stdout|lower
+      loop:
+        - rdmount -umount
+        - rdmount -map -t http -ro -l "{{ boot_image_url }}"
+        - rdmount -mount
 
     - name: Power on node
       delegate_to: localhost

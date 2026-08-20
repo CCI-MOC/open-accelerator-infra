@@ -2,4 +2,5 @@ plugin: ansible.builtin.constructed
 strict: false
 
 groups:
-  idrac_managed: bmc_addr is defined
+  bmc_idrac: bmc_addr is defined and bmc_type == "idrac"
+  bmc_lenovo: bmc_addr is defined and bmc_type == "lenovo"
