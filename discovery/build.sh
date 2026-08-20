@@ -76,7 +76,7 @@ dracut \
   --force \
   --modules "base udev-rules" \
   --install "lsblk lspci sh cat ip busybox mount umount mkdir printf udevadm poweroff reboot sleep curl setsid" \
-  --add-drivers "ahci nvme megaraid_sas mpt3sas sd_mod sr_mod virtio_blk virtio_scsi e1000 e1000e igb ixgbe i40e ice mlx5_core tg3 bnxt_en virtio_net" \
+  --add-drivers "ahci nvme megaraid_sas mpt3sas sd_mod sr_mod virtio_blk virtio_scsi e1000 e1000e igb ixgbe i40e ice mlx5_core tg3 bnx2 bnxt_en virtio_net" \
   --include /usr/share/hwdata/pci.ids /usr/share/hwdata/pci.ids \
   --include "${SCRIPT_DIR}/discovery-init" /usr/bin/discovery-init \
   --include "${SCRIPT_DIR}/discovery-report" /usr/bin/discovery-report \
