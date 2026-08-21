@@ -1,28 +1,54 @@
 - hosts: all
   gather_facts: false
   tasks:
-    - name: Get power state
-      delegate_to: localhost
-      ansible.builtin.command: >-
-        openstack baremetal node show {{ node_name }} -f value -c power_state
-      register: power_state
+    - name: Set power state for nodes managed by OpenStack
+      when: bm_management == "openstack"
+      block:
+        - name: Get power state
+          delegate_to: localhost
+          ansible.builtin.command: >-
+            openstack baremetal node show {{ node_name }} -f value -c power_state
+          register: power_state
 
-    - name: Power off node
-      delegate_to: localhost
-      when: >-
-        power_state.stdout != "power off"
-      ansible.builtin.command: >-
-        openstack baremetal node power off {{ node_name }}
+        - name: Power off node
+          delegate_to: localhost
+          when: >-
+            power_state.stdout != "power off"
+          ansible.builtin.command: >-
+            openstack baremetal node power off {{ node_name }}
 
-    - name: Wait for power off
-      delegate_to: localhost
-      ansible.builtin.command: >-
-        openstack baremetal node show {{ node_name }} -f value -c power_state
-      register: power_state
-      until: >-
-        power_state.stdout == "power off"
-      retries: 12
-      delay: 10
+        - name: Wait for power off
+          delegate_to: localhost
+          ansible.builtin.command: >-
+            openstack baremetal node show {{ node_name }} -f value -c power_state
+          register: power_state
+          until: >-
+            power_state.stdout == "power off"
+          retries: 12
+          delay: 10
+
+    - name: Set power state for nodes through the BMC
+      when: bm_management == "bmc" and bmc_type == "idrac"
+      block:
+        - name: Get power state
+          delegate_to: "{{ bmc_addr }}"
+          ansible.builtin.raw: racadm serveraction powerstatus
+          register: power_state
+
+        - name: Power off node
+          delegate_to: "{{ bmc_addr }}"
+          when: >-
+            "off" not in power_state.stdout|lower
+          ansible.builtin.raw: racadm serveraction powerdown
+
+        - name: Wait for power off
+          delegate_to: "{{ bmc_addr }}"
+          ansible.builtin.raw: racadm serveraction powerstatus
+          register: power_state
+          until: >-
+            "off" in power_state.stdout|lower
+          retries: 12
+          delay: 10
 
     - name: Configure virtual media (idrac)
       when: >
@@ -56,7 +82,13 @@
         -U {{ bmc_user }} -P {{ bmc_password }}
         chassis bootdev cdrom
 
-    - name: Power on node
+    - name: Power on node through OpenStack
+      when: bm_management == "openstack"
       delegate_to: localhost
       ansible.builtin.command: >-
         openstack baremetal node power on {{ node_name }}
+
+    - name: Power on node through the BMC
+      when: bm_management == "bmc" and bmc_type == "idrac"
+      delegate_to: "{{ bmc_addr }}"
+      ansible.builtin.raw: racadm serveraction powerup
