@@ -3,6 +3,7 @@ all:
     ansible_python_interpreter: /usr/bin/python3
     bmc_user: root
     bmc_password: "{{ lookup('env', 'BMC_PASSWORD') }}"
+    bm_management: openstack
   hosts:
     oac-dev-bastion:
       node_name: MOC-R4PAC22U31-S3A
@@ -57,3 +58,33 @@ all:
                 oac-dev-workload0-compute-2:
                   node_name: MOC-R4PAC22U29-S3
                   bmc_addr: 10.2.12.152
+        oac_prod_infra:
+          vars:
+            boot_image_url: "http://10.2.0.82/boot/discovery.iso"
+            cluster: oac-prod-infra
+            bm_management: bmc
+            bmc_type: idrac
+          children:
+            oac_prod_infra_controller:
+              hosts:
+                oac-prod-infra-control-0:
+                  node_name: MOC-R4PAC10U33-S1A
+                  bmc_addr: 10.2.13.171
+                oac-prod-infra-control-1:
+                  node_name: MOC-R4PAC10U35-S3B
+                  bmc_addr: 10.2.13.186
+                oac-prod-infra-control-2:
+                  node_name: MOC-R4PAC10U37-S3C
+                  bmc_addr: 10.2.13.197
+            oac_prod_infra_compute:
+              hosts:
+                oac-prod-infra-compute-0:
+                  node_name: R440-TEMP-NAME-1
+                  bmc_addr: 10.3.10.114
+                oac-prod-infra-compute-1:
+                  node_name: R440-TEMP-NAME-2
+                  bmc_addr: 10.3.10.115
+                oac-prod-infra-compute-2:
+                  node_name: R440-TEMP-NAME-3
+                  bmc_addr: 10.3.10.116
+

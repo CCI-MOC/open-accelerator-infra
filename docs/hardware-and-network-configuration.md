@@ -51,12 +51,12 @@ The nodes in rack R4PAC10 have been removed from ESI and dedicated to this proje
 | MOC-R4PAC10U35-S3B | fc430          | 10.2.13.186  | NIC1: 213, NIC2: 2311 | Prod Infra Control Plane |
 | MOC-R4PAC10U35-S3C | fc430          | 10.2.13.187  |                       |                          |
 | MOC-R4PAC10U35-S3D | fc430          | 10.2.13.188  |                       |                          |
-| MOC-R4PAC10U33-S1A | fc430          | 10.2.13.171  |                       |                          |
+| MOC-R4PAC10U33-S1A | fc430          | 10.2.13.171  | NIC1: 213, NIC2: 2311 | Prod Infra Control Plane |
 | MOC-R4PAC10U33-S1B | fc430          | 10.2.13.172  |                       |                          |
 | MOC-R4PAC10U33-S1C | fc430          | 10.2.13.173  |                       |                          |
 | MOC-R4PAC10U33-S1D | fc430          | 10.2.13.174  |                       |                          |
 | MOC-R4PAC10U33-S3A | fc430          | 10.2.13.175  |                       |                          |
-| MOC-R4PAC10U33-S3B | fc430          | 10.2.13.176  | NIC1: 213, NIC2: 2311 | Prod Infra Control Plane |
+| MOC-R4PAC10U33-S3B | fc430          | 10.2.13.176  |                       |                          |
 | MOC-R4PAC10U33-S3C | fc430          | 10.2.13.177  |                       |                          |
 | MOC-R4PAC10U33-S3D | fc430          | 10.2.13.178  |                       |                          |
 | MOC-R4PAC10U31-S1A | fc430          | 10.2.13.161  |                       |                          |
