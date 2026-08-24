@@ -61,26 +61,29 @@
       loop:
         - racadm remoteimage -d
         - racadm remoteimage -c -l "{{ boot_image_url }}"
+        - racadm set idrac.serverboot.FirstBootDevice VCD-DVD
+        - racadm set idrac.serverboot.BootOnce 1
 
     - name: Configure virtual media (lenovo)
-      when: >
-        bmc_type == "lenovo"
-      delegate_to: "{{ bmc_addr }}"
-      ansible.builtin.raw: "{{ item }}"
-      register: result
-      failed_when: >-
-        "[cli]err" in result.stdout|lower
-      loop:
-        - rdmount -umount
-        - rdmount -map -t http -ro -l "{{ boot_image_url }}"
-        - rdmount -mount
+      when: bmc_type == "lenovo"
+      block:
+        - name: Mount boot image
+          delegate_to: "{{ bmc_addr }}"
+          ansible.builtin.raw: "{{ item }}"
+          register: result
+          failed_when: >-
+            "[cli]err" in result.stdout|lower
+          loop:
+            - rdmount -umount
+            - rdmount -map -t http -ro -l "{{ boot_image_url }}"
+            - rdmount -mount
 
-    - name: Request one-time boot from virtual media
-      delegate_to: localhost
-      ansible.builtin.command: >-
-        ipmitool -I lanplus -H {{ bmc_addr }}
-        -U {{ bmc_user }} -P {{ bmc_password }}
-        chassis bootdev cdrom
+        - name: Request one-time boot from virtual media
+          delegate_to: localhost
+          ansible.builtin.command: >-
+            ipmitool -I lanplus -H {{ bmc_addr }}
+            -U {{ bmc_user }} -P {{ bmc_password }}
+            chassis bootdev cdrom
 
     - name: Power on node through OpenStack
       when: bm_management == "openstack"
