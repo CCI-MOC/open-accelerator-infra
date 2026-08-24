@@ -60,12 +60,13 @@ all:
                   bmc_addr: 10.2.12.152
         oac_prod_infra:
           vars:
-            boot_image_url: "http://10.2.0.82/boot/discovery.iso"
             cluster: oac-prod-infra
             bm_management: bmc
             bmc_type: idrac
           children:
             oac_prod_infra_controller:
+              vars:
+                boot_image_url: "http://10.2.0.82/boot/discovery.iso"
               hosts:
                 oac-prod-infra-control-0:
                   node_name: MOC-R4PAC10U33-S1A
@@ -77,6 +78,8 @@ all:
                   node_name: MOC-R4PAC10U37-S3C
                   bmc_addr: 10.2.13.197
             oac_prod_infra_compute:
+              vars:
+                boot_image_url: "http://10.2.0.82/boot/discovery-r440.iso"
               hosts:
                 oac-prod-infra-compute-0:
                   node_name: R440-TEMP-NAME-1
