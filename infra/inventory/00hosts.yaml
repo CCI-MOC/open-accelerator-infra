@@ -66,7 +66,7 @@ all:
           children:
             oac_prod_infra_controller:
               vars:
-                boot_image_url: "http://10.2.0.82/boot/discovery.iso"
+                boot_image_url: "http://10.2.0.82/boot/oac-prod-infra-agent.x86_64.iso"
               hosts:
                 oac-prod-infra-control-0:
                   node_name: MOC-R4PAC10U33-S1A
@@ -90,4 +90,17 @@ all:
                 oac-prod-infra-compute-2:
                   node_name: R440-TEMP-NAME-3
                   bmc_addr: 10.3.10.116
-
+            # fc830s temporarily used as computes while r440s issues are worked out
+            oac_prod_infra_compute_temp:
+              vars:
+                boot_image_url: "http://10.2.0.82/boot/oac-prod-infra-agent.x86_64.iso"
+              hosts:
+                oac-prod-infra-compute-temp-0:
+                  node_name: MOC-R4PAC10U11-S3
+                  bmc_addr: 10.2.13.62
+                oac-prod-infra-compute-temp-1:
+                  node_name: MOC-R4PAC10U09-S3
+                  bmc_addr: 10.2.13.52
+                oac-prod-infra-compute-temp-2:
+                  node_name: MOC-R4PAC10U19-S1
+                  bmc_addr: 10.2.13.101
