@@ -8,32 +8,33 @@
   connection: local
   gather_facts: false
   tasks:
-    - name: Get host metadata
-      ansible.builtin.command: openstack baremetal node show -f json {{ node_name }}
-      register: node_out
+    - name: Get MAC address (OpenStack)
+      when: bm_management == "openstack"
+      block:
+        - name: Get host metadata
+          ansible.builtin.command: openstack baremetal node show -f json {{ node_name }}
+          register: node_out
 
-    - name: Get network interfaces from host
-      ansible.builtin.command: openstack esi node network list --node {{ node_name }} -f json
-      register: node_network_out
+        - name: Get network interfaces from host
+          ansible.builtin.command: openstack esi node network list --node {{ node_name }} -f json
+          register: node_network_out
+
+        - name: Select MAC Address
+          ansible.builtin.set_fact:
+            mac_addr: "{{ (node_network_out.stdout|from_json)[0]['MAC Address'] }}"
+
+    - ansible.builtin.debug:
+        msg: "Looking for agent matching {{ mac_addr }}"
 
     - name: Get list of agents
       ansible.builtin.command: oc -n {{ inventory_namespace }} get agent -o json
       register: agents_out
 
-    - name: Select MAC Address
-      ansible.builtin.set_fact:
-        mac_address: "{{ (node_network_out.stdout|from_json)[0]['MAC Address'] }}"
-
-    - ansible.builtin.debug:
-        msg: "Looking for agent matching {{ mac_address }}"
-
     - name: Find matching agent
       ansible.builtin.set_fact:
         matched_agent: >-
-          {{ (agents_out.stdout|from_json) | json_query("items[?contains(status.inventory.interfaces[*].macAddress, '%s')]" % mac_address) }}
-      vars:
-        mac_address: "{{ (node_network_out.stdout|from_json)[0]['MAC Address'] }}"
-
+          {{ (agents_out.stdout|from_json) | json_query("items[?contains(status.inventory.interfaces[*].macAddress, '%s')]" % mac_addr) }}
+   
     - ansible.builtin.debug:
         msg: "{{ matched_agent[0].metadata.name }}"
       when: matched_agent|length>0
@@ -47,12 +48,22 @@
       vars:
         agent_name: "{{ matched_agent[0].metadata.name }}"
 
-    - name: Label agent
-      when: matched_agent|length>0
+    - name: Label agent (OpenStack)
+      when: matched_agent|length>0 and bm_management == "openstack"
       ansible.builtin.command: >-
         oc -n {{ inventory_namespace }} label agent {{ agent_name }} --overwrite
           openstack/resource-class={{ node.resource_class}}
           openstack/uuid={{ node.uuid }}
+          massopen.cloud/cluster={{ cluster }}
+      vars:
+        agent_name: "{{ matched_agent[0].metadata.name }}"
+        node: "{{ node_out.stdout|from_json }}"
+
+    - name: Label agent (non-OpenStack)
+      when: matched_agent|length>0 and bm_management != "openstack"
+      ansible.builtin.command: >-
+        oc -n {{ inventory_namespace }} label agent {{ agent_name }} --overwrite
+          openstack/resource-class={{ resource_class}}
           massopen.cloud/cluster={{ cluster }}
       vars:
         agent_name: "{{ matched_agent[0].metadata.name }}"
