@@ -77,19 +77,19 @@ all:
                 oac-prod-infra-control-2:
                   node_name: MOC-R4PAC10U37-S3C
                   bmc_addr: 10.2.13.197
-            oac_prod_infra_compute:
-              vars:
-                boot_image_url: "http://10.2.0.82/boot/discovery-r440.iso"
-              hosts:
-                oac-prod-infra-compute-0:
-                  node_name: R440-TEMP-NAME-1
-                  bmc_addr: 10.3.10.114
-                oac-prod-infra-compute-1:
-                  node_name: R440-TEMP-NAME-2
-                  bmc_addr: 10.3.10.115
-                oac-prod-infra-compute-2:
-                  node_name: R440-TEMP-NAME-3
-                  bmc_addr: 10.3.10.116
+#            oac_prod_infra_compute:
+#              vars:
+#                boot_image_url: "http://10.2.0.82/boot/discovery-r440.iso"
+#              hosts:
+#                oac-prod-infra-compute-0:
+#                  node_name: R440-TEMP-NAME-1
+#                  bmc_addr: 10.3.10.114
+#                oac-prod-infra-compute-1:
+#                  node_name: R440-TEMP-NAME-2
+#                  bmc_addr: 10.3.10.115
+#                oac-prod-infra-compute-2:
+#                  node_name: R440-TEMP-NAME-3
+#                  bmc_addr: 10.3.10.116
             # fc830s temporarily used as computes while r440s issues are worked out
             oac_prod_infra_compute_temp:
               vars:
@@ -104,3 +104,43 @@ all:
                 oac-prod-infra-compute-temp-2:
                   node_name: MOC-R4PAC10U19-S1
                   bmc_addr: 10.2.13.101
+        oac_prod_workload0:
+          vars:
+            cluster: oac-prod-workload0
+            bmc_type: idrac
+          children:
+            oac_prod_workload0_compute:
+              vars:
+                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
+                bm_management: bmc
+              hosts:
+                oac-prod-workload0-compute-0:
+                  node_name: MOC-R4PAC10U29-S3
+                  bmc_addr: 10.2.13.152
+                  mac_addr: 24:8a:07:1e:85:f4
+                  resource_class: fc830
+                oac-prod-workload0-compute-1:
+                  node_name: MOC-R4PAC10U27-S3
+                  bmc_addr: 10.2.13.142
+                  mac_addr: 24:8a:07:1e:85:a4
+                  resource_class: fc830
+                oac-prod-workload0-compute-2:
+                  node_name: MOC-R4PAC10U25-S3
+                  bmc_addr: 10.2.13.132
+                  mac_addr: 24:8a:07:1e:34:a6
+                  resource_class: fc830
+            oac_prod_workload0_gpu:
+              vars:
+                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
+                bm_management: openstack
+                bmc_type: lenovo
+              hosts:
+                oac-prod-workload0-gpu-0:
+                  node_name: MOC-R4PCC02U10
+                  bmc_addr: 10.2.19.110
+                oac-prod-workload0-gpu-1:
+                  node_name: MOC-R4PCC04U09
+                  bmc_addr: 10.2.20.109
+                oac-prod-workload0-gpu-2:
+                  node_name: MOC-R4PCC04U11
+                  bmc_addr: 10.2.20.111
