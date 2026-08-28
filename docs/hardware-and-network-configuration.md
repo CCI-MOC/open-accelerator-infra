@@ -11,7 +11,7 @@
 | Prod Workload       | 216     | 10.20.12.0/23 |
 | PureStorage Infra   | 2311    | 10.9.1.0/24   |
 | PureStorage Staging | 2312    | 10.9.2.0/24   |
-| PureStorage Prod    | 2313    | 10.9.3.0/24   |
+| PureStorage Prod    | 2313    | 10.9.8.0/22   |
 
 ### Other Networks
 
