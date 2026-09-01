@@ -136,11 +136,23 @@ all:
                 bmc_type: lenovo
               hosts:
                 oac-prod-workload0-gpu-0:
-                  node_name: MOC-R4PCC02U10
-                  bmc_addr: 10.2.19.110
+                  node_name: MOC-R4PCC02U30
+                  bmc_addr: 10.2.19.130
                 oac-prod-workload0-gpu-1:
                   node_name: MOC-R4PCC04U09
                   bmc_addr: 10.2.20.109
                 oac-prod-workload0-gpu-2:
                   node_name: MOC-R4PCC04U11
                   bmc_addr: 10.2.20.111
+            oac_prod_workload0_gpu_sxm:
+              vars:
+                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
+                bm_management: openstack
+                bmc_type: lenovo
+              hosts:
+                oac-prod-workload0-gpu-sxm-0:
+                  node_name: MOC-R8PAC23U31
+                  bmc_addr: 10.2.18.131
+                oac-prod-workload0-gpu-sxm-1:
+                  node_name: MOC-R8PAC23U26
+                  bmc_addr: 10.2.18.126
