@@ -32,7 +32,7 @@ all:
           vars:
             network_name: oac-dev-workload0
             cluster: oac-dev-workload0
-            boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-discovery.iso"
+            boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-agent.iso"
           children:
             oac_dev_workload0_gpu:
               vars:
