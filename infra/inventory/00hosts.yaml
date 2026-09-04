@@ -108,10 +108,10 @@ all:
           vars:
             cluster: oac-prod-workload0
             bmc_type: idrac
+            boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
           children:
             oac_prod_workload0_compute:
               vars:
-                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
                 bm_management: bmc
               hosts:
                 oac-prod-workload0-compute-0:
@@ -131,7 +131,6 @@ all:
                   resource_class: fc830
             oac_prod_workload0_gpu:
               vars:
-                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
                 bm_management: openstack
                 bmc_type: lenovo
               hosts:
