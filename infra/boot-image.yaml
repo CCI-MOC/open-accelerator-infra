@@ -81,11 +81,21 @@
 
         - name: Request one-time boot from virtual media
           delegate_to: localhost
-          ansible.builtin.command: >-
-            ipmitool -I lanplus -H {{ bmc_addr }}
-            -U {{ bmc_user }} -P {{ bmc_password }}
-            chassis bootdev cdrom
-
+          ansible.builtin.uri:
+            url: "https://{{ bmc_addr }}/redfish/v1/Systems/1"
+            url_username: "{{ bmc_user }}"
+            url_password: "{{ bmc_password }}"
+            validate_certs: false
+            method: PATCH
+            body_format: json
+            body: |
+              {
+                "Boot": {
+                  "BootSourceOverrideTarget": "Cd",
+                  "BootSourceOverrideMode": "UEFI",
+                  "BootSourceOverrideEnabled": "Once"
+                }
+              }
     - name: Power on node through OpenStack
       when: bm_management == "openstack"
       delegate_to: localhost
