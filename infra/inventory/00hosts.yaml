@@ -32,11 +32,11 @@ all:
           vars:
             network_name: oac-dev-workload0
             cluster: oac-dev-workload0
+            boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-discovery.iso"
           children:
             oac_dev_workload0_gpu:
               vars:
                 bmc_type: lenovo
-                boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-discovery.iso"
               hosts:
                 oac-dev-workload0-gpu-0:
                   node_name: MOC-R4PCC02U05
@@ -47,7 +47,6 @@ all:
             oac_dev_workload0_compute:
               vars:
                 bmc_type: idrac
-                boot_image_url: "http://10.2.0.82/boot/oac-dev-infra-discovery.iso"
               hosts:
                 oac-dev-workload0-compute-0:
                   node_name: MOC-R4PAC21U03-S3
@@ -108,10 +107,10 @@ all:
           vars:
             cluster: oac-prod-workload0
             bmc_type: idrac
+            boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
           children:
             oac_prod_workload0_compute:
               vars:
-                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
                 bm_management: bmc
               hosts:
                 oac-prod-workload0-compute-0:
@@ -131,7 +130,6 @@ all:
                   resource_class: fc830
             oac_prod_workload0_gpu:
               vars:
-                boot_image_url: "http://10.2.0.82/boot/prod-workload0-agent-discovery.iso"
                 bm_management: openstack
                 bmc_type: lenovo
               hosts:
