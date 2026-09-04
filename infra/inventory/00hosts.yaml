@@ -77,19 +77,19 @@ all:
                 oac-prod-infra-control-2:
                   node_name: MOC-R4PAC10U37-S3C
                   bmc_addr: 10.2.13.197
-#            oac_prod_infra_compute:
-#              vars:
-#                boot_image_url: "http://10.2.0.82/boot/discovery-r440.iso"
-#              hosts:
-#                oac-prod-infra-compute-0:
-#                  node_name: R440-TEMP-NAME-1
-#                  bmc_addr: 10.3.10.114
-#                oac-prod-infra-compute-1:
-#                  node_name: R440-TEMP-NAME-2
-#                  bmc_addr: 10.3.10.115
-#                oac-prod-infra-compute-2:
-#                  node_name: R440-TEMP-NAME-3
-#                  bmc_addr: 10.3.10.116
+            #   oac_prod_infra_compute:
+            #     vars:
+            #       boot_image_url: "http://10.2.0.82/boot/discovery-r440.iso"
+            #     hosts:
+            #       oac-prod-infra-compute-0:
+            #         node_name: R440-TEMP-NAME-1
+            #         bmc_addr: 10.3.10.114
+            #       oac-prod-infra-compute-1:
+            #         node_name: R440-TEMP-NAME-2
+            #         bmc_addr: 10.3.10.115
+            #       oac-prod-infra-compute-2:
+            #         node_name: R440-TEMP-NAME-3
+            #         bmc_addr: 10.3.10.116
             # fc830s temporarily used as computes while r440s issues are worked out
             oac_prod_infra_compute_temp:
               vars:
