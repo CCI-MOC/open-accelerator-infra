@@ -1,6 +1,6 @@
 locals {
   networks = {
-    oac-infra = {
+    oac-dev-infra = {
       cidr = "10.20.2.0/23"
       allocation_pool = {
         start = "10.20.2.10"
@@ -24,7 +24,7 @@ locals {
         }
       ]
     }
-    oac-staging = {
+    oac-dev-staging = {
       cidr = "10.20.4.0/23"
       allocation_pool = {
         start = "10.20.4.10"
@@ -48,7 +48,7 @@ locals {
         }
       ]
     }
-    oac-prod = {
+    oac-dev-workload0 = {
       cidr = "10.20.6.0/23"
       allocation_pool = {
         start = "10.20.6.10"
