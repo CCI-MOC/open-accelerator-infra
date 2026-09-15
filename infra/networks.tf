@@ -55,7 +55,7 @@ locals {
         end   = "10.20.6.255"
       }
       extra_ports = [
-        "oac-prod-port",
+        "oac-dev-workload0-port",
       ]
       extra_routes = [
         {

@@ -51,9 +51,9 @@ resource "openstack_networking_port_v2" "oac-staging-port" {
   }
 }
 
-resource "openstack_networking_port_v2" "oac-prod-port" {
+resource "openstack_networking_port_v2" "oac-dev-workload0-port" {
   provider       = openstack.admin
-  name           = "oac-prod-port"
+  name           = "oac-dev-workload0-port"
   network_id     = openstack_networking_network_v2.oac-fw-net.id
   admin_state_up = "true"
   tenant_id      = data.openstack_identity_project_v3.open-accelerator.id
