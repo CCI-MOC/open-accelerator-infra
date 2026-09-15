@@ -29,9 +29,20 @@
 | ?? R440-2 ??       | r440           | 10.3.10.115  | NIC1: 213  | Prod Infra Compute       |
 | ?? R440-3 ??       | r440           | 10.3.10.116  | NIC1: 213  | Prod Infra Compute       |
 
+### A100s
+
+|    Node Name    | Resource Class | IPMI Address |      Networking       | Purpose                  |
+| ----------------| -------------- | ------------ | --------------------- | ------------------------ |
+| MOC-R8PAC23U26  | a100           | 10.2.18.126  | NIC1: 216, NIC2: 2313 | Prod Workload Compute    |
+| MOC-R8PAC23U31  | a100           | 10.2.18.131  | NIC1: 216, NIC2: 2313 | Prod Workload Compute    |
+
 ### H100s
 
-TBD
+|    Node Name    | Resource Class | IPMI Address |      Networking       | Purpose                  |
+| ----------------| -------------- | ------------ | --------------------- | ------------------------ |
+| MOC-R4PCC02U30  | h100           | 10.2.19.130  | NIC1: 216, NIC2: 2313 | Prod Workload Compute    |
+| MOC-R4PCC04U09  | h100           | 10.2.20.109  | NIC1: 216, NIC2: 2313 | Prod Workload Compute    |
+| MOC-R4PCC04U11  | h100           | 10.2.20.111  | NIC1: 216, NIC2: 2313 | Prod Workload Compute    |
 
 ###  Rack R4PAC10
 
