@@ -7,7 +7,7 @@ locals {
         end   = "10.20.2.255"
       }
       extra_ports = [
-        "oac-infra-port",
+        "oac-dev-infra-port",
       ]
       extra_routes = [
         {

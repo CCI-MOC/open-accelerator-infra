@@ -25,9 +25,9 @@ data "openstack_identity_project_v3" "open-accelerator" {
   name     = "open-accelerator"
 }
 
-resource "openstack_networking_port_v2" "oac-infra-port" {
+resource "openstack_networking_port_v2" "oac-dev-infra-port" {
   provider       = openstack.admin
-  name           = "oac-infra-port"
+  name           = "oac-dev-infra-port"
   network_id     = openstack_networking_network_v2.oac-fw-net.id
   admin_state_up = "true"
   tenant_id      = data.openstack_identity_project_v3.open-accelerator.id
